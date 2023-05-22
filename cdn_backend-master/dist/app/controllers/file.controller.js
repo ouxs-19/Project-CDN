@@ -7,7 +7,8 @@ const multer = require('multer');
 exports.addFile = (req, res) => {
     const storage = multer.diskStorage({
         destination: function(req, file, cb) {
-            const folderPath = req.body.folder;
+            const folderPath = `/cdn${req.body.folder.substring(1, req.body.folder.length - 1)}`;
+            console.log(folderPath)
             if (!fs.existsSync(folderPath)) {
                 cb(new Error('The specified path is incorrect.'));
             } else {
@@ -126,7 +127,8 @@ exports.getAll = async(req, res) => {
 };
 
 exports.deleteByPath = (req, res) => {
-    const filePath = req.query.path;
+    const filePath = req.body.path;
+    console.log(filePath)
     //console.log(req.query.path);
     if (!fs.existsSync(filePath)) {
         return res.status(404).json({ message: 'The file does not exist.' });
