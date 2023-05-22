@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels: 
+        app: backend
+    spec:
+      enableServiceLinks: true
+      containers:
+      - name: backend-server
+        image: ouxs19/project2cs:file-server
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 30Mi
+        ports:
+        - containerPort: 80
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 3
+          periodSeconds: 30
+
