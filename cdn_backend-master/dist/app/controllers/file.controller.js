@@ -7,8 +7,9 @@ const multer = require('multer');
 exports.addFile = (req, res) => {
     const storage = multer.diskStorage({
         destination: function(req, file, cb) {
-            const folderPath = `/cdn${req.body.folder.substring(1, req.body.folder.length - 1)}`;
+            const folderPath = (process.env.FILES_LOCATION || "/cdn") + JSON.parse(req.body.folder);
             console.log(folderPath)
+
             if (!fs.existsSync(folderPath)) {
                 cb(new Error('The specified path is incorrect.'));
             } else {
@@ -55,7 +56,7 @@ function getFileType(fileName) {
 // Retrieve all files from the database.
 exports.getAll = async(req, res) => {
     const endpointIp = process.env.ENDPOINT_IP || 'localhost'; //replace localhost with 193.194.77.253
-    const endpointPort = process.env.ENDPOINT_PORT || 8080; //replace 8080 with 80
+    const endpointPort = process.env.ENDPOINT_PORT || 80; //replace 8080 with 80
     const link = `http://${endpointIp}:${endpointPort}`;
     try {
         const response = await axios.get(link);
@@ -127,9 +128,8 @@ exports.getAll = async(req, res) => {
 };
 
 exports.deleteByPath = (req, res) => {
-    const filePath = req.body.path;
-    console.log(filePath)
-    //console.log(req.query.path);
+    const filePath = (process.env.FILES_LOCATION || "/cdn") + req.body.path;
+    console.log(filePath);
     if (!fs.existsSync(filePath)) {
         return res.status(404).json({ message: 'The file does not exist.' });
     }

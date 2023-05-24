@@ -2,7 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import AddContentForm from './AddContentForm'
 
-export default function ViewerPopUp({ open, setOpen }) {
+export default function ViewerPopUp({ open, setOpen, setfilesObjects }) {
 
   const cancelButtonRef = useRef(null)
 
@@ -45,7 +45,7 @@ export default function ViewerPopUp({ open, setOpen }) {
                 </div>
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <AddContentForm />
+                        <AddContentForm setfilesObjects={setfilesObjects} />
                   </div>
                 </div>
               </Dialog.Panel>

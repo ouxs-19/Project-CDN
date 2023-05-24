@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: file
-      image: gcr.io/shellmates-ctfs/b4nner
+      image: ouxs19/cdn:file-server
       ports:
         - containerPort: 80
       volumeMounts:

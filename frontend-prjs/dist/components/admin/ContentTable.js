@@ -4,25 +4,7 @@ import axios from 'axios'
 // Data
 import { BASEURL } from '@/shared/baseUrl'
 
-export default function ContentTable({ filesObjects }) {
-
-    const handleDelete = (fileObject) => {
-        axios({
-            method: 'delete',
-            url: `${BASEURL}/files/`,
-            data: {
-                path: `/cdn/${fileObject.field.id}/${fileObject.track.id}/${fileObject.module.id}/${fileObject.title}`
-            },
-          })
-          .then((response) => {
-            alert('Content Delete successfully')
-            console.log(response.data);
-          })
-          .catch((err) => {
-            alert("Something Went Wrong ! Please Try Again")
-            console.log(err.message);
-          })
-    }
+export default function ContentTable({ filesObjects, handleDelete }) {
 
     const filesList = filesObjects.map((fileObject, id) => (
         <tr key={id}>

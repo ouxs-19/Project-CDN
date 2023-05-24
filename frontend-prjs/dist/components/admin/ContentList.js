@@ -18,6 +18,56 @@ export default function ContentList() {
         setAddContentForm(!addContentFormOpen)
       }
 
+      const handleDelete = (fileObject) => {
+        axios({
+            method: 'delete',
+            url: `${BASEURL}/files/`,
+            data: {
+                path: `/${fileObject.field.id}/${fileObject.track.id}/${fileObject.module.id}/${fileObject.title}`
+            },
+          })
+          .then((response) => {
+            alert('Content Delete successfully')
+
+            axios.get(`${BASEURL}/files`)
+            .then(response => {
+              const fieldsInfos = response.data;
+              let filesObjectsTmp = []
+              fieldsInfos.forEach((field) => {
+                field.tracks.forEach((track) => {
+                  track.modules.forEach((module) => {
+                    if(module.links) {
+                      module.links.forEach((link) => {
+                        filesObjectsTmp.push({
+                          ...link,
+                          field: {
+                            id: field.id,
+                            title: field.title
+                          },
+                          track: {
+                            id: track.id,
+                            title: track.title
+                          },
+                          module: {
+                            id: module.id,
+                            title: module.title
+                          }
+                        })
+                      })
+                    }
+                  })
+                })
+              })
+
+              setfilesObjects(filesObjectsTmp)
+            })
+          })
+          .catch((err) => {
+            alert("Something Went Wrong ! Please Try Again")
+            console.log(err.message);
+          })
+    }
+
       useEffect(() => {
         axios.get(`${BASEURL}/files`)
           .then(response => {
@@ -72,10 +122,10 @@ export default function ContentList() {
             <button type="button" onClick={() => handleClick()} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-4 py-2">Add Content +</button>
         </div>
         <div className="mt-20 mx-auto grid grid-cols-1 gap-y-8">
-          <ContentTable filesObjects={filesObjects} />
+          <ContentTable filesObjects={filesObjects} handleDelete={handleDelete} />
         </div>
         {addContentFormOpen ?
-            <ViewerPopUp open={addContentFormOpen} setOpen={setAddContentForm}/>
+            <ViewerPopUp open={addContentFormOpen} setOpen={setAddContentForm} setfilesObjects={setfilesObjects}/>
             :
             <></>
         }

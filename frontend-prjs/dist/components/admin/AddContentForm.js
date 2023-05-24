@@ -4,7 +4,7 @@ import { BASEURL } from '@/shared/baseUrl'
 
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
-export default function AddContentForm() {
+export default function AddContentForm({ setfilesObjects }) {
 
   // FormsFields
   const [formField, setFormField] = useState({})
@@ -99,14 +99,45 @@ export default function AddContentForm() {
     })
     .then((response) => {
       alert('Content added successfully')
-      console.log(response.data);
+      axios.get(`${BASEURL}/files`)
+      .then(response => {
+        const fieldsInfos = response.data;
+        let filesObjectsTmp = []
+        fieldsInfos.forEach((field) => {
+          field.tracks.forEach((track) => {
+            track.modules.forEach((module) => {
+              if(module.links) {
+                module.links.forEach((link) => {
+                  filesObjectsTmp.push({
+                    ...link,
+                    field: {
+                      id: field.id,
+                      title: field.title
+                    },
+                    track: {
+                      id: track.id,
+                      title: track.title
+                    },
+                    module: {
+                      id: module.id,
+                      title: module.title
+                    }
+                  })
+                })
+              }
+            })
+          })
+        })
+
+        setfilesObjects(filesObjectsTmp)
+      })
     })
     .catch((err) => {
       alert("Something Went Wrong ! Please Try Again")
       console.log(err.message);
     })
 
-  }
+  } 
 
   const fieldsOptions = fields.map((field) => (
     <option key={field.id} value={field.id}>{field.title}</option>
