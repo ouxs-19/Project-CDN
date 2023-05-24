@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ouxs19/cdn:backend:latest
+          image: ouxs19/cdn:backend
           ports:
             - containerPort: 4000
           imagePullPolicy: Always
