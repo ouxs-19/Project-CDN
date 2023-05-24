@@ -1,17 +1,26 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: file-pod
+  name: file-deployment
 spec:
-  containers:
-    - name: file
-      image: ouxs19/cdn:file-server
-      ports:
-        - containerPort: 80
-      volumeMounts:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: file
+  template:
+    metadata:
+      labels:
+        app: file
+    spec:
+      containers:
+        - name: file
+          image: ouxs19/cdn:file-server
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: file-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
         - name: file-volume
-          mountPath: /usr/share/nginx/html
-  volumes:
-    - name: file-volume
-      hostPath:
-        path: /cdn
+          hostPath:
+            path: /cdn

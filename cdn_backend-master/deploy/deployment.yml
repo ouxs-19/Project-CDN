@@ -1,22 +1,31 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: backend-pod
+  name: backend-deployment
 spec:
-  containers:
-    - name: backend
-      image: ouxs19/cdn:backend
-      ports:
-        - containerPort: 4000
-      env:
-        - name: ENDPOINT_IP
-          value: file
-        - name: ENDPOINT_PORT
-          value: "80"
-      volumeMounts:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: ouxs19/cdn:backend
+          ports:
+            - containerPort: 4000
+          env:
+            - name: ENDPOINT_IP
+              value: file
+            - name: ENDPOINT_PORT
+              value: "80"
+          volumeMounts:
+            - name: backend-volume
+              mountPath: /cdn
+      volumes:
         - name: backend-volume
-          mountPath: /cdn
-  volumes:
-    - name: backend-volume
-      hostPath:
-        path: /path/to/file-backend-server/files
+          hostPath:
+            path: /cdn
