@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: file-service
 spec:
   selector:
-    app: backend
+    app: file
+  type: LoadBalancer  
   ports:
-    - name: http
-      port: 30100
+    - protocol: TCP
+      port: 80
       targetPort: 80
-  type: NodePort
+      nodePort: 30000

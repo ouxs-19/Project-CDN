@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     ports:  
       - '4000:4000'
-    image: ouxs19/project2cs:backend
+    image: ouxs19/cdn:backend
     deploy:
       replicas: 1
       restart_policy:
@@ -25,7 +25,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '80:80'
-    image: ouxs19/project2cs:file-server
+    image: ouxs19/cdn:file-server
     deploy:
       replicas: 1
       restart_policy:
@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
     ports:  
       - '3000:3000'
-    image: ouxs19/project2cs:frontend
+    image: ouxs19/cdn:frontend
     deploy:
       replicas: 1
       restart_policy:

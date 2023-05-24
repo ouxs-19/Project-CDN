@@ -1,35 +1,17 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: backend-server
+  name: file-pod
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: backend
-  template:
-    metadata:
-      labels: 
-        app: backend
-    spec:
-      enableServiceLinks: true
-      containers:
-      - name: backend-server
-        image: ouxs19/project2cs:file-server
-        resources:
-          limits:
-            cpu: 100m
-            memory: 100Mi
-          requests:
-            cpu: 10m
-            memory: 30Mi
-        ports:
+  containers:
+    - name: file
+      image: gcr.io/shellmates-ctfs/b4nner
+      ports:
         - containerPort: 80
-          name: http
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 3
-          periodSeconds: 30
-
+      volumeMounts:
+        - name: file-volume
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: file-volume
+      hostPath:
+        path: /cdn
