@@ -14,12 +14,13 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ouxs19/cdn:backend
+          image: ouxs19/cdn:backend:latest
           ports:
             - containerPort: 4000
+          imagePullPolicy: Always
           env:
             - name: ENDPOINT_IP
-              value: file
+              value: file-service.default.svc.cluster.local
             - name: ENDPOINT_PORT
               value: "80"
           volumeMounts:

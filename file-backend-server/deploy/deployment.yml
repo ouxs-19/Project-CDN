@@ -17,6 +17,7 @@ spec:
           image: ouxs19/cdn:file-server
           ports:
             - containerPort: 80
+          imagePullPolicy: Always
           volumeMounts:
             - name: file-volume
               mountPath: /usr/share/nginx/html
