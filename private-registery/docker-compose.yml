@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  registry:
+    image: registry:2
+    ports:
+    - "1000:5000"
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - ./data:/data

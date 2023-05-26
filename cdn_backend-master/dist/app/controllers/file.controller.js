@@ -55,7 +55,7 @@ function getFileType(fileName) {
 }
 // Retrieve all files from the database.
 exports.getAll = async(req, res) => {
-    const endpointIp = process.env.ENDPOINT_IP || 'localhost'; //replace localhost with 193.194.77.253
+    const endpointIp = process.env.ENDPOINT_IP || '172.16.0.1'; //replace localhost with 193.194.77.253
     const endpointPort = process.env.ENDPOINT_PORT || 80; //replace 8080 with 80
     const link = `http://${endpointIp}:${endpointPort}`;
     try {
@@ -118,9 +118,9 @@ exports.getAll = async(req, res) => {
                 total.push(respF);
             }
         }
-
         res.status(200).send(total);
     } catch (error) {
+        console.log(res);
         console.error(error);
         res.status(500).send('Error retrieving data from server');
     }

@@ -13,4 +13,4 @@ RUN yarn build
 
 ENV PORT 3000
 
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "dev"]

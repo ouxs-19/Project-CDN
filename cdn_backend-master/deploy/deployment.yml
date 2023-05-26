@@ -14,13 +14,20 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ouxs19/cdn:backend
+          image: 172.16.0.1:1000/backend
           ports:
             - containerPort: 4000
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
           env:
             - name: ENDPOINT_IP
-              value: file-service.default.svc.cluster.local
+              value: 172.16.0.1
             - name: ENDPOINT_PORT
               value: "80"
           volumeMounts:

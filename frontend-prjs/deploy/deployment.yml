@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: front
-          image: ouxs19/cdn:frontend
+          image: 172.16.0.1:1000/frontend
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
           env:
             - name: ENDPOINT_IP
-              value: backend-service.default.svc.cluster.local
+              value: 172.16.0.1
             - name: ENDPOINT_PORT
               value: "4000"
