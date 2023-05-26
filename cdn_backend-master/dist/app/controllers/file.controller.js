@@ -57,7 +57,10 @@ function getFileType(fileName) {
 exports.getAll = async(req, res) => {
     const endpointIp = process.env.ENDPOINT_IP || '172.16.0.1'; //replace localhost with 193.194.77.253
     const endpointPort = process.env.ENDPOINT_PORT || 80; //replace 8080 with 80
+    const haproxyIp = process.env.HAPROXY_IP || '193.194.77.246';
+    const haproxyPort = process.env.HAPROXY_PORT || 80; 
     const link = `http://${endpointIp}:${endpointPort}`;
+    const haproxy_link = `http://${haproxyIp}:${haproxyPort}`;
     try {
         const response = await axios.get(link);
         const data = response.data;
@@ -102,7 +105,7 @@ exports.getAll = async(req, res) => {
                                         const respFi = {};
                                         respFi["title"] = value4["name"];
                                         respFi["type"] = getFileType(value4["name"]);
-                                        respFi["uri"] = link + "/" + value1["name"] + "/" + value2["name"] + "/" + value3["name"] + "/" + value4["name"];
+                                        respFi["uri"] = haproxy_link + "/" + value1["name"] + "/" + value2["name"] + "/" + value3["name"] + "/" + value4["name"];
                                         respM["links"].push(respFi);
                                     }
                                 }

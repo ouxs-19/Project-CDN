@@ -16,6 +16,8 @@ services:
     environment:
       - ENDPOINT_IP=172.16.0.1
       - ENDPOINT_PORT=80
+      - HAPROXY_PORT=193.194.77.246
+      - HAPROXY_PORT=80
     volumes:
       - ./file-backend-server/files:/cdn
 
