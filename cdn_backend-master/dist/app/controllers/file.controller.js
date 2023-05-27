@@ -57,7 +57,11 @@ function getFileType(fileName) {
 exports.getAll = async(req, res) => {
     const endpointIp = process.env.ENDPOINT_IP || '172.16.0.1'; //replace localhost with 193.194.77.253
     const endpointPort = process.env.ENDPOINT_PORT || 80; //replace 8080 with 80
+    const haproxyIp = process.env.HAPROXY_IP || 'localhost'||'193.194.77.246';
+    const haproxyPort = process.env.HAPROXY_PORT ||8080|| 80; 
     const link = `http://${endpointIp}:${endpointPort}`;
+    const haproxy_link = `http://${haproxyIp}:${haproxyPort}`;
+    console.log(haproxy_link);
     try {
         const response = await axios.get(link);
         const data = response.data;
@@ -102,7 +106,7 @@ exports.getAll = async(req, res) => {
                                         const respFi = {};
                                         respFi["title"] = value4["name"];
                                         respFi["type"] = getFileType(value4["name"]);
-                                        respFi["uri"] = link + "/" + value1["name"] + "/" + value2["name"] + "/" + value3["name"] + "/" + value4["name"];
+                                        respFi["uri"] = haproxy_link + "/" + value1["name"] + "/" + value2["name"] + "/" + value3["name"] + "/" + value4["name"];
                                         respM["links"].push(respFi);
                                     }
                                 }
@@ -127,34 +131,33 @@ exports.getAll = async(req, res) => {
 
 };
 
-exports.deleteByPath = (req, res) => {
+exports.deleteByPath = async (req, res) => {
     const filePath = (process.env.FILES_LOCATION || "/cdn") + req.body.path;
     console.log(filePath);
     if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ message: 'The file does not exist.' });
+      return res.status(404).json({ message: 'The file does not exist.' });
     }
-
-    fs.unlink(filePath, (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ message: 'An error occurred while deleting the file.' });
+    const nginxHost = ["localhost:8080","193.194.77.142:80","193.194.77.222:80","193.194.77.190:80"];
+    const fileUri = req.body.path;
+    try {
+      await fs.promises.unlink(filePath);
+  
+      await Promise.all(nginxHost.map(async (element) => {
+        try {
+          await axios.head(`http://${element}${fileUri}`, {
+            headers: {
+              'invalid-header': 'true',
+            },
+          });
+          console.log('Invalidation successfully sent to cache server ' + `http://${element}${fileUri}`);
+        } catch (error) {
+          console.log("Could not reach cache server " + `http://${element}${fileUri}`);
         }
-        res.status(200).json({ message: 'The file was deleted successfully.' });
-        /*const nginxHost = 'localhost';
-        const fileUri = filePath;
-
-        axios({
-                method: 'PURGE',
-                url: `http://${nginxHost}${fileUri}/purge`
-            })
-            .then((response) => {
-                console.log(response.status);
-                res.status(200).json({ message: 'The file was deleted successfully.' });
-            })
-            .catch((error) => {
-                console.log(error);
-            });*/
-
-    });
-
-};
+      }));
+  
+      res.status(200).json({ message: 'The file was deleted successfully.' });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'An error occurred while deleting the file.' });
+    }
+  };
