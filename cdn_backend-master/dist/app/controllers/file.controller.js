@@ -135,39 +135,29 @@ exports.deleteByPath = async (req, res) => {
     const filePath = (process.env.FILES_LOCATION || "/cdn") + req.body.path;
     console.log(filePath);
     if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ message: 'The file does not exist.' });
+      return res.status(404).json({ message: 'The file does not exist.' });
     }
-
-    fs.unlink(filePath, (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ message: 'An error occurred while deleting the file.' });
+    const nginxHost = ["localhost:8080","193.194.77.142:80","193.194.77.222:80","193.194.77.190:80"];
+    const fileUri = req.body.path;
+    try {
+      await fs.promises.unlink(filePath);
+  
+      await Promise.all(nginxHost.map(async (element) => {
+        try {
+          await axios.head(`http://${element}${fileUri}`, {
+            headers: {
+              'invalid-header': 'true',
+            },
+          });
+          console.log('Invalidation successfully sent to cache server ' + `http://${element}${fileUri}`);
+        } catch (error) {
+          console.log("Could not reach cache server " + `http://${element}${fileUri}`);
         }
-        const nginxHost = ["localhost:8080","193.194.77.142:80","193.194.77.254:80","193.194.77.222:80","193.194.77.158:80","193.194.77.190:80"];
-        const fileUri = filePath;
-        nginxHost.forEach(async(element) => {
-            try {
-                await axios.head(`http://${element}${fileUri}`, {
-                headers: {
-                  'invalid-header': true
-                }});
-                console.log('Invalidation successfully sent to cache server '+`http://${element}${fileUri}`);
-            } catch (error) {
-                console.log("could not reach cache server "+`http://${element}${fileUri}`);
-            }
-        });
-        /*axios({
-                method: 'head',
-                url: `http://${element}${fileUri}`,
-                headers: {'invalid-header': 'true'}
-            })
-            .then((response) => {
-                console.log("Invalidation sent to cache server "+element);
-            })
-            .catch((error) => {
-                console.log("could not reach cache server "+element);
-            });*/
-        res.status(200).json({ message: 'The file was deleted successfully.' });
-    });
-
-};
+      }));
+  
+      res.status(200).json({ message: 'The file was deleted successfully.' });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'An error occurred while deleting the file.' });
+    }
+  };
