@@ -116,9 +116,9 @@ sleep 30
 
 echo Adding port forward 
 
-kubectl port-forward svc/file-service 80:80 --address='0.0.0.0' & 
-kubectl port-forward svc/backend-service 4000:4000 --address='0.0.0.0' &    
-kubectl port-forward svc/front-service 3000:3000 --address='0.0.0.0' & 
+sudo -E kubectl port-forward svc/file-service 80:80 --address='0.0.0.0' & 
+sudo -E kubectl port-forward svc/backend-service 4000:4000 --address='0.0.0.0' &    
+sudo -E kubectl port-forward svc/front-service 3000:3000 --address='0.0.0.0' &
 
 #######
 
