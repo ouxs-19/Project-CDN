@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-    res.send("<h1>Welcome to this REST API</h1>");
+    res.send("Welcome to this REST API\n");
 });
 app.use("/files", filesRoutes);
 

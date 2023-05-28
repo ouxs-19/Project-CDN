@@ -1,13 +1,25 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import DocIconSwitch from './DocIconSwitch';
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+
+// Styling
+
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+
+// Data
+import { PDFWORKERURL } from '@/shared/pdfWorkerUrl';
 
 export default function ViewerPopUp({ open, setOpen, selectedDoc }) {
 
   // Note : selectedDoc[0] is the selected Doc, it is an array because documents property of DocViewer takes an array as value
 
   const cancelButtonRef = useRef(null)
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -58,6 +70,17 @@ export default function ViewerPopUp({ open, setOpen, selectedDoc }) {
                       <video className='w-3/4 mx-auto my-8' controls>
                         <source src={selectedDoc[0].uri} type="video/mp4"></source>
                       </video>
+                      : selectedDoc[0].fileType == "pdf" ?
+                      <Worker workerUrl={PDFWORKERURL + '/pdf.worker.js'}>
+                          <div style={{ height: '750px' }}>
+                              <Viewer
+                                  fileUrl={selectedDoc[0].uri}
+                                  plugins={[
+                                      defaultLayoutPluginInstance,
+                                  ]}
+                              />
+                          </div>
+                      </Worker>
                       :
                       <DocViewer
                             pluginRenderers={DocViewerRenderers}

@@ -3,11 +3,11 @@ kind: Deployment
 metadata:
   name: front-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: front
-  template:
+  template: 
     metadata:
       labels:
         app: front

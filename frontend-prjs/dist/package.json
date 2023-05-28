@@ -12,10 +12,13 @@
     "@cyntler/react-doc-viewer": "^1.13.0",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
     "axios": "^1.4.0",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
     "next": "13.2.4",
+    "pdfjs-dist": "^3.6.172",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0"

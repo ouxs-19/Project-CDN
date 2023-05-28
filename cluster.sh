@@ -81,7 +81,6 @@ echo starting k8s cluster
 
 cd - 
 cd file-backend-server  && minikube delete && minikube start --mount --mount-string ./files/:/cdn --insecure-registry ${IP}:1000
-minikube addons enable metrics-server
 cd - 
 
 #######
@@ -108,9 +107,18 @@ kubectl apply -f cdn_backend-master/deploy
 
 
 #######
-echo waiting for all pods to be created
-sleep 30
 
+echo Waiting for deployments to be applied
+sleep 5
+
+
+while [ ! -z "$(kubectl get pods | grep -v 'STATUS' | grep -v 'Running')" ]; do
+    echo Waiting for all pods to be running
+    sleep 10
+done
+
+
+echo All pods are up
 #######
 
 
@@ -120,7 +128,8 @@ echo Adding port forward
 sudo -E kubectl port-forward svc/file-service 80:80 --address='0.0.0.0' & 
 sudo -E kubectl port-forward svc/backend-service 4000:4000 --address='0.0.0.0' &    
 sudo -E kubectl port-forward svc/front-service 3000:3000 --address='0.0.0.0' &
-
+minikube addons enable metrics-server
+    
 #######
 
 
