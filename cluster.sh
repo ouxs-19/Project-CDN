@@ -81,6 +81,7 @@ echo starting k8s cluster
 
 cd - 
 cd file-backend-server  && minikube delete && minikube start --mount --mount-string ./files/:/cdn --insecure-registry ${IP}:1000
+minikube addons enable metrics-server
 cd - 
 
 #######
