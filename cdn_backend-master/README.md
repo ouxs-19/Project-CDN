@@ -2,7 +2,7 @@
 
 Welcome to OpenCDN Back End Application, this app was made using :
 
- - This is an [Express.js](https://expressjs.com/) app.
+ - [Express.js](https://expressjs.com/)
 
 ## Getting Started
 
