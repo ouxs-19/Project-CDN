@@ -2,6 +2,14 @@
 
 This repository contains the implementation of a CDN and applying it for course development for Algerian universities.  
 
+## Contributors
+A big thank you to all the contributors who have dedicated their time and effort to this repository.
+- [Ahmed Mokeddem](https://github.com/ahmedmokeddem/)
+- [Silem Oussama](https://github.com/oussama-sil)
+- [Walid Berrouk](https://github.com/walid-Berrouk/)
+- [Djad benguerra](https://github.com/Djad002)
+- [Abderrahmane Kasmi](https://github.com/Abderrahmene-KSM)
+
 ## Architecture 
 This figure showcases the general architecture of our CDN solution:  
 
