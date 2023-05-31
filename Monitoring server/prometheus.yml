@@ -1,0 +1,43 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'HAProxy'
+    static_configs:
+      - targets: ['193.194.77.246:9101']
+        labels:
+          alias: loadbalancer1
+  - job_name: 'Cache Constantine'
+    static_configs:
+      - targets: ['193.194.77.222:9913']
+        labels:
+          alias: cache_constantine
+    metrics_path: /metrics
+  - job_name: 'Cache Constantine Node'
+    static_configs:
+      - targets: ['193.194.77.222:9100']
+        labels:
+          alias: cache_constantine_node
+    metrics_path: /metrics
+  - job_name: 'Cache Annaba'
+    static_configs:
+      - targets: ['193.194.77.142:9913']
+        labels:
+          alias: cache_annaba
+    metrics_path: /metrics
+  - job_name: 'Cache Oran'
+    static_configs:
+      - targets: ['193.194.77.190:9913']
+        labels:
+          alias: cache_oran
+    metrics_path: /metrics
+  - job_name: 'Cache Oran Node'
+    static_configs:
+      - targets: ['193.194.77.190:9100']
+        labels:
+          alias: cache_oran_node
+  - job_name: 'Cache Annaba Node'
+    static_configs:
+      - targets: ['193.194.77.142:9100']
+        labels:
+          alias: cache_annaba_node
